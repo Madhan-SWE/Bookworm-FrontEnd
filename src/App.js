@@ -37,7 +37,7 @@ function Search({
     }
 
     return (
-        <div className="row">
+        <div className="row m-2">
             <div className="col-4 offset-2 text-center">
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -69,7 +69,7 @@ function Search({
             <div className="col-2">
                 <button
                     type="button"
-                    class="btn btn-primary m-1"
+                    class="btn btn-success m-1"
                     onClick={search}
                 > Search
                 </button>
@@ -156,7 +156,7 @@ function Card({ bookDetails }) {
                 <div className="card-body text-center">
                     <h6>{bookDetails.author}</h6>
                     <h6>
-                        <span className={bgcolor}>
+                        <span className={bgcolor} style={{color: "white"}}>
                             <i class="fa fa-star" aria-hidden="true"></i>
                             {bookRating}
                         </span>
@@ -174,7 +174,7 @@ function Card({ bookDetails }) {
                         {bookDetails.finalPrice}
                     </h6>
                     <h6 className="text-center">
-                        <a href={bookDetails.buyingUrl}> Buy Now</a>
+                        <a href={bookDetails.buyingUrl} className="link"> Buy Now</a>
                     </h6>
                     <div class="card-footer text-muted">
                         <h6 className="text-center"> {bookDetails.website}</h6>
@@ -193,7 +193,7 @@ function Cards({ selectedBooks, itemsPerPage, currentPage }) {
 
     if (selectedBooks.length === 0) {
         return (
-            <div className="row">
+            <div className="row m-2">
                 <div className="col-12">
                     <div
                         className="alert alert-danger text-center text-bold "
@@ -207,7 +207,7 @@ function Cards({ selectedBooks, itemsPerPage, currentPage }) {
     }
     return (
         <div className="container">
-            <div className="row">
+            <div className="row m-3">
                 <div className="col-12">
                     <div
                         className="alert alert-success text-center text-bold "
@@ -246,9 +246,9 @@ function AutoSuggestions({ suggestionText, booksList, changeSearchTextOnly }) {
         <div className="autoSuggestions">
             {res.map((item) => {
                 return (
-                    <h5 className="suggestion mb-3" onClick={handleOnClick}>
+                    <h6 className="suggestion" onClick={handleOnClick}>
                         {item.name}
-                    </h5>
+                    </h6>
                 );
             })}
         </div>

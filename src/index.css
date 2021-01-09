@@ -1,6 +1,6 @@
 .titleSection
 {
-  background-color: rgb(179, 115, 73);
+  background-color: rgb(10, 96, 255);
   color: white;
   padding: 2px;
 }
@@ -12,15 +12,47 @@ body{
 .autoSuggestions{
   position: absolute;
   display: block;
-  background-color: white;
+  background-color: rgb(194, 190, 255);
   text-align: center;
   justify-content: center;
   left: 18%;
   width: 30%;
   z-index: 1;
+  box-shadow: 5px 5px #3b3a3b;
 }
 
 .suggestion{
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgb(212, 211, 211);
+  padding: 5px;
   
+}
+
+.suggestion:hover{
+background-color: rgb(56, 56, 56);
+color: white;
+cursor: pointer;
+
+}
+.container-fluid{
+  padding: 0;
+  margin: 0;
+}
+
+.appTitle{
+  padding: 5px;
+}
+
+body{
+  font-family: 'Fraunces', serif;
+}
+
+.card:hover{
+  background-color: rgb(213, 220, 253);
+}
+
+.card:hover .card-img-top,
+.card:focus .card-img-top {
+  -webkit-transform: scale(1.02);
+  transform: scale(1.02);
+  opacity:0.9;
 }
