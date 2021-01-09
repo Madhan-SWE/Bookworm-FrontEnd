@@ -8,3 +8,19 @@
 body{
   background-color: rgb(87, 27, 226);
 }
+
+.autoSuggestions{
+  position: absolute;
+  display: block;
+  background-color: white;
+  text-align: center;
+  justify-content: center;
+  left: 18%;
+  width: 30%;
+  z-index: 1;
+}
+
+.suggestion{
+  border-bottom: 1px solid black;
+  
+}
