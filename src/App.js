@@ -1,40 +1,98 @@
 import { useState, useEffect } from "react";
+import Pagination from "./components/Pagination";
 import "./index.css";
 
 // import SearchBar from './components/SearchBar'
 
-function Search({ changeSearchText, searchText, changeSelectedBooks }) {
-
+function Search({
+    changeSearchText,
+    searchText,
+    changeSelectedBooks,
+    changeNoOfItems,
+    removeSuggestionText,
+}) {
     // const [text, setText] = useState(searchText);
 
     function handleOnChange(event) {
         let value = event.target.value;
         changeSearchText(value);
     }
-    
-    function search(){
-      console.log("---", searchText)
-      changeSelectedBooks(searchText)
+
+    function search() {
+        console.log("---", searchText);
+        changeSelectedBooks(searchText);
+        removeSuggestionText();
+    }
+
+    function clear(){
+      changeSearchText('');
+      // changeSelectedBooks(searchText);
+      // search();
 
     }
+    function handleOnChangeNoOfItems(event) {
+        let NoOfItems = event.target.value;
+        if (NoOfItems !== "Choose items per page") changeNoOfItems(NoOfItems);
+        else changeNoOfItems(6);
+    }
+
     return (
         <div className="row">
             <div className="col-4 offset-2 text-center">
-                <input
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">
+                            <i class="fa fa-search" aria-hidden="true">
+                                {" "}
+                            </i>
+                        </span>
+                    </div>
+                    <input
+                        type="text"
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter your query here!"
+                        onChange={handleOnChange}
+                        value={searchText}
+                        className="form-control"
+                        required
+                    />
+                </div>
+                {/* <input
                     type="text"
                     className="form-control"
                     placeholder="Enter Book name here"
                     onChange={handleOnChange}
                     value={searchText}
-                />
+                /> */}
             </div>
             <div className="col-2">
-                <button type="button" class="btn btn-primary btn-block" onClick={search}>
-                    <i class="fa fa-search" aria-hidden="true">
-                        {" "}
-                    </i>{" "}
-                    | Search
+                <button
+                    type="button"
+                    class="btn btn-primary m-1"
+                    onClick={search}
+                > Search
                 </button>
+                <button
+                    type="button"
+                    class="btn btn-danger m-1"
+                    onClick={clear}
+                > Clear
+                </button>
+            </div>
+            <div className="col-2">
+                <select
+                    id="inputState"
+                    className="form-control"
+                    onChange={handleOnChangeNoOfItems}
+                >
+                    <option selected>Choose items per page</option>
+                    <option value="3">3</option>
+                    <option value="6">6</option>
+                    <option value="9">9</option>
+                    <option value="12">12</option>
+                    <option value="15">15</option>
+                </select>
             </div>
         </div>
     );
@@ -52,11 +110,23 @@ function Footer() {
     );
 }
 
-function SearchBar({ changeSearchText, searchText, changeSelectedBooks}) {
+function SearchBar({
+    changeSearchText,
+    searchText,
+    changeSelectedBooks,
+    changeNoOfItems,
+    removeSuggestionText,
+}) {
     return (
         <div className="titleSection text-center">
             <h1 className="appTitle">FindMyBook</h1>
-            <Search changeSearchText={ changeSearchText } searchText={ searchText } changeSelectedBooks={changeSelectedBooks}/>
+            <Search
+                changeSearchText={changeSearchText}
+                searchText={searchText}
+                changeSelectedBooks={changeSelectedBooks}
+                changeNoOfItems={changeNoOfItems}
+                removeSuggestionText={removeSuggestionText}
+            />
         </div>
     );
 }
@@ -115,7 +185,26 @@ function Card({ bookDetails }) {
     );
 }
 
-function Cards({ selectedBooks }) {
+function Cards({ selectedBooks, itemsPerPage, currentPage }) {
+    let end = currentPage * itemsPerPage;
+    end = end > selectedBooks.length ? selectedBooks.length : end;
+    let start = (currentPage - 1) * itemsPerPage;
+    let booksObj = selectedBooks.slice(start, end);
+
+    if (selectedBooks.length === 0) {
+        return (
+            <div className="row">
+                <div className="col-12">
+                    <div
+                        className="alert alert-danger text-center text-bold "
+                        role="alert"
+                    >
+                        <h5>No results found !</h5>
+                    </div>
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="container">
             <div className="row">
@@ -128,7 +217,7 @@ function Cards({ selectedBooks }) {
                     </div>
                 </div>
 
-                {selectedBooks.map((book) => {
+                {booksObj.map((book) => {
                     return <Card bookDetails={book} />;
                 })}
             </div>
@@ -136,39 +225,34 @@ function Cards({ selectedBooks }) {
     );
 }
 
-function AutoSuggestions({ suggestionText, booksList, changeSearchTextOnly}) {
+function AutoSuggestions({ suggestionText, booksList, changeSearchTextOnly }) {
+    function handleOnClick(event) {
+        let text = event.target.innerText;
+        changeSearchTextOnly(text);
+        return <div></div>;
+    }
 
-    function handleOnClick(event){
-      let text = event.target.innerText;
-      changeSearchTextOnly(text)
-      return (<div></div>)
-      
+    if (suggestionText.length === 0) {
+        return <div></div>;
     }
-    
-    if (suggestionText.length === 0){
-      return (
-        <div></div>
-      )
-    }
-    
-    let res = booksList.filter((item)=>{
-        return JSON.stringify(item).toLowerCase()
-        .includes(suggestionText.toLowerCase());
-    })
-    
-    
+
+    let res = booksList.filter((item) => {
+        return JSON.stringify(item)
+            .toLowerCase()
+            .includes(suggestionText.toLowerCase());
+    });
+
     return (
-      <div className="autoSuggestions">
-        {
-          res.map((item)=>{
-            return <h5 className="suggestion mb-3" onClick={handleOnClick}>{ item.name }</h5>
-          })
-        }
-      </div>
-    )
-    
-    
-     
+        <div className="autoSuggestions">
+            {res.map((item) => {
+                return (
+                    <h5 className="suggestion mb-3" onClick={handleOnClick}>
+                        {item.name}
+                    </h5>
+                );
+            })}
+        </div>
+    );
 
     // return (
     //     <div className="autoSuggestions">
@@ -186,8 +270,10 @@ var BACKENDURL = "http://localhost:3500";
 function App() {
     const [booksList, setBooksList] = useState([]);
     const [selectedBooks, setSelectedBooks] = useState([]);
-    const [searchText, setSearchText] = useState('');
-    const [suggestionText, setSuggestionText] = useState('');
+    const [searchText, setSearchText] = useState("");
+    const [suggestionText, setSuggestionText] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPersPage] = useState(6);
 
     function doFetch() {
         console.log("Fetching Data: ");
@@ -197,35 +283,79 @@ function App() {
             .then((res) => {
                 setBooksList(res.body);
                 setSelectedBooks(res.body);
+                setCurrentPage(1);
             });
     }
 
-
     useEffect(doFetch, []);
-    
-    function changeSearchText(text){
-      setSearchText(text)
-      setSuggestionText(text)
-    }
-    
-    function changeSearchTextOnly(text){
-      setSearchText(text);
-      setSuggestionText('');
+
+    function changeSearchText(text) {
+        setSearchText(text);
+        setSuggestionText(text);
     }
 
-    function changeSelectedBooks(searchText){
-      let res = booksList.filter((item)=>{
-        return JSON.stringify(item).toLowerCase()
-        .includes(searchText.toLowerCase());
-    })
-    setSelectedBooks(res);
-
+    function changeSearchTextOnly(text) {
+        setSearchText(text);
+        setSuggestionText("");
     }
+
+    function removeSuggestionText() {
+        setSuggestionText("");
+    }
+
+    function changeSelectedBooks(searchText) {
+        let res = booksList.filter((item) => {
+            return JSON.stringify(item)
+                .toLowerCase()
+                .includes(searchText.toLowerCase());
+        });
+        setCurrentPage(1);
+        setSelectedBooks(res);
+    }
+
+    const changeNoOfItems = (value) => {
+        setCurrentPage(1);
+        setItemsPersPage(value);
+    };
+
+    const changePage = (event) => {
+        let changedPage = event.target.innerText;
+
+        if (changedPage === "Next") {
+            setCurrentPage(currentPage + 1);
+        } else if (changedPage === "Previous") {
+            setCurrentPage(currentPage - 1);
+        } else {
+            changedPage = parseInt(changedPage);
+            setCurrentPage(changedPage);
+        }
+    };
+
     return (
         <div className="container-fluid">
-            <SearchBar changeSearchText={changeSearchText} searchText={ searchText } changeSelectedBooks = {changeSelectedBooks} />
-            <AutoSuggestions suggestionText={ suggestionText} booksList={booksList} changeSearchTextOnly={ changeSearchTextOnly } />
-            <Cards selectedBooks={selectedBooks} />
+            <SearchBar
+                changeSearchText={changeSearchText}
+                searchText={searchText}
+                changeSelectedBooks={changeSelectedBooks}
+                changeNoOfItems={changeNoOfItems}
+                removeSuggestionText={removeSuggestionText}
+            />
+            <AutoSuggestions
+                suggestionText={suggestionText}
+                booksList={booksList}
+                changeSearchTextOnly={changeSearchTextOnly}
+            />
+            <Cards
+                selectedBooks={selectedBooks}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+            />
+            <Pagination
+                selectedBooks={selectedBooks}
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                changePage={changePage}
+            />
             <Footer />
         </div>
     );
