@@ -1,3 +1,10 @@
-h1{
-  color: red
+.titleSection
+{
+  background-color: rgb(179, 115, 73);
+  color: white;
+  padding: 2px;
+}
+
+body{
+  background-color: rgb(87, 27, 226);
 }
