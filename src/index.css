@@ -6,23 +6,23 @@
 }
 
 body{
-  background-color: rgb(87, 27, 226);
+  background-color: rgb(66, 66, 66);
 }
 
 .autoSuggestions{
   position: absolute;
   display: block;
-  background-color: rgb(194, 190, 255);
+  background-color: rgb(203, 224, 250);
   text-align: center;
   justify-content: center;
   left: 18%;
   width: 30%;
   z-index: 1;
-  box-shadow: 5px 5px #3b3a3b;
+  box-shadow: 5px 5px #acb4ff;
 }
 
 .suggestion{
-  border-bottom: 1px solid rgb(212, 211, 211);
+  border-bottom: 1px solid rgb(114, 113, 113);
   padding: 5px;
   
 }
