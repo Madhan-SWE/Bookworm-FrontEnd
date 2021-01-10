@@ -6,7 +6,7 @@ import AutoSuggestions from "./components/AutoSuggestions";
 import Cards from "./components/Cards";
 import Footer from "./components/Footer";
 
-var BACKENDURL = "http://localhost:3500";
+var BACKENDURL = "https://find-my-book-app.herokuapp.com";
 
 function App() {
     const [booksList, setBooksList] = useState([]);
